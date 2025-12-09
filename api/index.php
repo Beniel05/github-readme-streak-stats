@@ -8,8 +8,14 @@ require_once "stats.php";
 require_once "card.php";
 
 // validate GitHub token from environment variables (Vercel)
-if (!getenv("GITHUB_TOKEN")) {
-    renderOutput("GITHUB_TOKEN is missing in environment variables.", 500);
+$token =
+    $_ENV["GITHUB_TOKEN"]
+    ?? $_SERVER["GITHUB_TOKEN"]
+    ?? getenv("GITHUB_TOKEN")
+    ?? null;
+
+if (!$token) {
+    renderOutput("There is no GitHub token available", 500);
 }
 
 // set cache to refresh once per three horus
